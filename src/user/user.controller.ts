@@ -17,11 +17,6 @@ export class UserController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    // try {
-    //   return this.userService.createUser(createUserDto);
-    // } catch (error) {
-    //   throw new BadRequestException(error.message);
-    // }
     return this.userService.createUser(createUserDto);
   }
 
