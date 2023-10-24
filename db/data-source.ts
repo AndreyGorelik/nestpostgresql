@@ -7,9 +7,10 @@ export const dataSourceOptions: DataSourceOptions = {
   username: 'postgres',
   password: '1234',
   database: 'postgres',
-  entities: ['dist/**/*.entity{.js,.ts}'],
+  // entities: ['dist/**/*.entity{.js,.ts}'],
+  entities: [__dirname + '/../**/*.entity.{js,ts}'],
   migrations: ['dist/db/migrations/*.js'],
-  synchronize: true,
+  synchronize: false,
 };
 
 const dataSource = new DataSource(dataSourceOptions);
