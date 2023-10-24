@@ -13,10 +13,4 @@ export class User {
 
   @Column({ type: 'varchar', length: 30 })
   password: string;
-
-  @Column({ type: 'varchar', length: 30 })
-  surname: string;
-
-  @Column({ type: 'varchar', length: 30 })
-  pet: string;
 }
