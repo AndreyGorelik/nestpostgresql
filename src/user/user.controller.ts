@@ -6,37 +6,57 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import { ExpressRequestInterface, UserResponseInterface } from './user.types';
 
-@Controller('user')
+@Controller('api')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  @Post('signup')
+  async create(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<UserResponseInterface> {
     const user = await this.userService.createUser(createUserDto);
-    return await this.userService.buildUserResponse(user);
+    return this.userService.buildUserResponse(user);
   }
 
-  @Get()
+  @Post('signin')
+  async loginUser(
+    @Body() loginUserDto: LoginUserDto,
+  ): Promise<UserResponseInterface> {
+    const user = await this.userService.loginUser(loginUserDto);
+    return this.userService.buildUserResponse(user);
+  }
+
+  @Get('userall')
   async findAll() {
     return await this.userService.findAllUser();
   }
 
-  @Get(':id')
+  @Get('user')
+  async currentUser(
+    @Req() request: ExpressRequestInterface,
+  ): Promise<UserResponseInterface> {
+    return this.userService.buildUserResponse(request.user);
+  }
+
+  @Get('user/:id')
   async findOne(@Param('id') id: string) {
     return await this.userService.viewUser(+id);
   }
 
-  @Patch(':id')
+  @Patch('user/:id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.updateUser(+id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete('user/:id')
   async remove(@Param('id') id: string) {
     return await this.userService.removeUser(+id);
   }
