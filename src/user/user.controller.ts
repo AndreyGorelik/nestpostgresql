@@ -6,13 +6,16 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { ExpressRequestInterface, UserResponseInterface } from './user.types';
+import { UserResponseInterface } from './user.types';
+import { UserDecorator } from './decorators/user.decorator';
+import { User } from './entities/user.entity';
+import { AuthGuard } from './guards/auth.guard';
 
 @Controller('api')
 export class UserController {
@@ -35,16 +38,26 @@ export class UserController {
   }
 
   @Get('userall')
+  @UseGuards(AuthGuard)
   async findAll() {
     return await this.userService.findAllUser();
   }
 
   @Get('user')
+  @UseGuards(AuthGuard)
   async currentUser(
-    @Req() request: ExpressRequestInterface,
+    // @Req() request: ExpressRequestInterface,
+    @UserDecorator() user: User,
   ): Promise<UserResponseInterface> {
-    return this.userService.buildUserResponse(request.user);
+    return this.userService.buildUserResponse(user);
   }
+
+  // @Get('user')
+  // async currentUser(
+  //   @UserDecorator() user: User,
+  // ): Promise<UserResponseInterface> {
+  //   return this.userService.buildUserResponse(user);
+  // }
 
   @Get('user/:id')
   async findOne(@Param('id') id: string) {

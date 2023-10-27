@@ -4,6 +4,7 @@ import { ExpressRequestInterface } from '../user.types';
 import { verify } from 'jsonwebtoken';
 import { JWT_SECRET } from '@app/config/config';
 import { UserService } from '../user.service';
+
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   constructor(private readonly userService: UserService) {}
