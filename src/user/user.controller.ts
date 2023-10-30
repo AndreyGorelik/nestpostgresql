@@ -7,15 +7,17 @@ import {
   Param,
   Delete,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
+import { CreateUserDto } from './dto/createUser.dto';
+import { UpdateUserDto } from './dto/updateUser.dto';
+import { LoginUserDto } from './dto/loginUser.dto';
 import { UserResponseInterface } from './user.types';
 import { UserDecorator } from './decorators/user.decorator';
 import { User } from './entities/user.entity';
 import { AuthGuard } from './guards/auth.guard';
+import { UpdateCurrentUserDto } from './dto/updateCurrentUser.dto';
 
 @Controller('api')
 export class UserController {
@@ -46,9 +48,24 @@ export class UserController {
   @Get('user')
   @UseGuards(AuthGuard)
   async currentUser(
+    // in Req() we intercept request and return to the controller smth else
     // @Req() request: ExpressRequestInterface,
     @UserDecorator() user: User,
   ): Promise<UserResponseInterface> {
+    return this.userService.buildUserResponse(user);
+  }
+
+  @Put('user')
+  @UseGuards(AuthGuard)
+  async updateCurrentUser(
+    @UserDecorator('id') currentUserId: number,
+    @Body() updateCurrentUserDto: UpdateCurrentUserDto,
+  ): Promise<UserResponseInterface> {
+    const user = await this.userService.updateCurrentUser(
+      currentUserId,
+      updateCurrentUserDto,
+    );
+
     return this.userService.buildUserResponse(user);
   }
 

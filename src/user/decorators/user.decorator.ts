@@ -6,7 +6,7 @@ export const UserDecorator = createParamDecorator(
     const request = ctx.switchToHttp().getRequest<ExpressRequestInterface>();
 
     if (!request.user) {
-      null;
+      return null;
     }
 
     if (data) {

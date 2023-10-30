@@ -6,9 +6,15 @@ import { UserModule } from './user/user.module';
 import { dataSourceOptions } from 'db/data-source';
 import { CatsModule } from './cats/cats.module';
 import { AuthMiddleware } from './user/middlewares/auth.middleware';
+import { ArticleModule } from './article/article.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(dataSourceOptions), UserModule, CatsModule],
+  imports: [
+    TypeOrmModule.forRoot(dataSourceOptions),
+    UserModule,
+    CatsModule,
+    ArticleModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

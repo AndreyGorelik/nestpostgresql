@@ -1,14 +1,20 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/createUser.dto';
+import { UpdateUserDto } from './dto/updateUser.dto';
 import { User } from './entities/user.entity';
 import { sign } from 'jsonwebtoken';
 import { JWT_SECRET } from '@app/config/config';
-import { LoginUserDto } from './dto/login-user.dto';
+import { LoginUserDto } from './dto/loginUser.dto';
 import { UserResponseInterface } from './user.types';
 import { compare } from 'bcrypt';
+import { UpdateCurrentUserDto } from './dto/updateCurrentUser.dto';
 @Injectable()
 export class UserService {
   constructor(
@@ -29,10 +35,7 @@ export class UserService {
     });
 
     if (userByEmail || userByName) {
-      throw new HttpException(
-        'email or name are already registered',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new BadRequestException('email or name are already registered');
     }
 
     const user: User = new User();
@@ -96,6 +99,15 @@ export class UserService {
         id: id,
       },
     });
+  }
+
+  async updateCurrentUser(
+    userId: number,
+    updateCurrentUserDto: UpdateCurrentUserDto,
+  ): Promise<User> {
+    const user = await this.findById(userId);
+    Object.assign(user, updateCurrentUserDto);
+    return await this.userRepository.save(user);
   }
 
   generateJwt(user: User): string {
