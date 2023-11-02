@@ -2,6 +2,8 @@ import {
   BeforeInsert,
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -23,6 +25,10 @@ export class User {
 
   @OneToMany(() => ArticleEntity, (article) => article.author)
   articles: ArticleEntity[];
+
+  @ManyToMany(() => ArticleEntity)
+  @JoinTable()
+  favorites: ArticleEntity[];
 
   @BeforeInsert()
   async hashPassword() {

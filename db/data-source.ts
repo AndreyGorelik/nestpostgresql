@@ -15,3 +15,15 @@ export const dataSourceOptions: DataSourceOptions = {
 
 const dataSource = new DataSource(dataSourceOptions);
 export default dataSource;
+
+// export const appDataSource = new DataSource(dataSourceOptions);
+
+// const main = async () => {
+//   console.time('main');
+//   await appDataSource.initialize();
+// };
+
+// main().catch((err) => {
+//   console.error(err);
+//   process.exit(1);
+// });
