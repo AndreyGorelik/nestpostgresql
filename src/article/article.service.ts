@@ -10,7 +10,8 @@ import {
 } from './article.types';
 import slugify from 'slugify';
 import { UpdateArticleDto } from './dto/updateArticle.dto';
-import dataSource from 'db/data-source';
+import { appDataSource } from 'db/data-source';
+
 @Injectable()
 export class ArticleService {
   constructor(
@@ -101,7 +102,7 @@ export class ArticleService {
     currentUserId: number,
     query: any,
   ): Promise<ArticlesResponseInterface> {
-    const queryBuilder = dataSource
+    const queryBuilder = appDataSource
       .getRepository(ArticleEntity)
       .createQueryBuilder('articles')
       .leftJoinAndSelect('articles.author', 'author');
